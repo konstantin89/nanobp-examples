@@ -1,0 +1,1 @@
+Those files are nanopb files that are downloaded with nanopb package.
