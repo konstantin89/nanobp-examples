@@ -13,6 +13,7 @@
 typedef struct _ExampleMessage {
     int32_t number;
     pb_callback_t str;
+    pb_callback_t str_array;
 } ExampleMessage;
 
 
@@ -21,17 +22,19 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define ExampleMessage_init_default              {0, {{NULL}, NULL}}
-#define ExampleMessage_init_zero                 {0, {{NULL}, NULL}}
+#define ExampleMessage_init_default              {0, {{NULL}, NULL}, {{NULL}, NULL}}
+#define ExampleMessage_init_zero                 {0, {{NULL}, NULL}, {{NULL}, NULL}}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define ExampleMessage_number_tag                1
 #define ExampleMessage_str_tag                   2
+#define ExampleMessage_str_array_tag             3
 
 /* Struct field encoding specification for nanopb */
 #define ExampleMessage_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, INT32,    number,            1) \
-X(a, CALLBACK, SINGULAR, STRING,   str,               2)
+X(a, CALLBACK, SINGULAR, STRING,   str,               2) \
+X(a, CALLBACK, REPEATED, STRING,   str_array,         3)
 #define ExampleMessage_CALLBACK pb_default_field_callback
 #define ExampleMessage_DEFAULT NULL
 

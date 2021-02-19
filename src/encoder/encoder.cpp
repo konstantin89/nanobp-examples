@@ -1,9 +1,10 @@
 #include "pb_encode.h"
 #include "auto_generated/ExampleMessage.pb.h"
 
+#include "common/utils.h"
+
 #include <vector>
 #include <string.h>
-#include <fstream>
 #include <string>
 
 
@@ -17,41 +18,40 @@ bool encode_string(pb_ostream_t* stream, const pb_field_t* field, void* const* a
     return pb_encode_string(stream, (uint8_t*)str, strlen(str));
 }
 
-
-bool writeBinaryFile(std::string filePath, std::vector<uint8_t> contentToWrite)
+bool encode_string_vector(pb_ostream_t* stream, const pb_field_t* field, void* const* arg)
 {
-    std::ofstream fileStream(filePath, std::ios::out | std::ios::binary);
+    std::vector<std::string>* str_vector = (std::vector<std::string>*)(*arg);
 
-    if (contentToWrite.empty())
+    for (size_t i = 0; i < str_vector->size(); i++)
     {
-        return false;
+
+        if (!pb_encode_tag(stream, PB_WT_STRING, field->tag)) {
+            return false;
+        }
+
+        if (!pb_encode_string(stream, (uint8_t*)str_vector->at(i).c_str(), str_vector->at(i).size())) {
+            return false;
+        }
     }
-
-    if (!fileStream.is_open())
-    {
-        return false;
-    }
-
-    uint8_t* bufferToWritePtr = &contentToWrite[0];
-
-    fileStream.write(
-        reinterpret_cast <char*>(bufferToWritePtr),
-        contentToWrite.size());
-
-    fileStream.close();
 
     return true;
 }
 
-int main()
+
+int runEncoderExample()
 {
 
     ExampleMessage message = ExampleMessage_init_default;
+
+    std::vector<std::string> str_vector = { "first", "second" };
 
     message.number = 3;
 
     message.str.arg = "str";
     message.str.funcs.encode = encode_string;
+
+    message.str_array.arg = &str_vector;
+    message.str_array.funcs.encode = encode_string_vector;
 
 
     std::vector<uint8_t> encodedMessage = {};
@@ -88,7 +88,12 @@ int main()
         return 1;
     }
 
-    writeBinaryFile("message.bin",encodedMessage);
+    writeBinaryFile("message.bin", encodedMessage);
 
     return 0;
+}
+
+int main()
+{
+    return runEncoderExample();
 }
