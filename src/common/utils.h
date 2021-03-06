@@ -2,8 +2,11 @@
 
 #include <optional>
 #include <vector>
-#include <fstream>
+
 #include <string>
+
+#include "auto_generated/ExampleMessage.pb.h"
+
 
 namespace utils
 {
@@ -12,6 +15,9 @@ namespace utils
     std::optional<std::vector<uint8_t>> readBinaryFile(std::string filePath);
 
     bool writeBinaryFile(std::string filePath, std::vector<uint8_t>& contentToWrite);
+
+    void printMessageObject(ExampleMessage& message);
+
 }
 
 
