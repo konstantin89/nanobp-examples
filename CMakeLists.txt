@@ -19,4 +19,10 @@ set(NANOPB_INCLUDE_PATH   ${NANOPB_PATH})
 FILE (GLOB NANOPB_SOURCES ${NANOPB_PATH}/*.c)
 
 
+set(COMPILE_PROTO_SCRIPT_PATH  ${CMAKE_CURRENT_LIST_DIR}/compile_proto.bat)
+
+message("Generating NanoPB autogen files")
+
+execute_process(COMMAND ${COMPILE_PROTO_SCRIPT_PATH} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(src)
