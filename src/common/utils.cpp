@@ -1,6 +1,8 @@
 #include "utils.h"
 
-std::optional<std::vector<uint8_t>> readBinaryFile(std::string filePath)
+
+
+std::optional<std::vector<uint8_t>> utils::readBinaryFile(std::string filePath)
 {
     std::ifstream fileStream(filePath, std::ios::in | std::ios::binary);
 
@@ -33,7 +35,7 @@ std::optional<std::vector<uint8_t>> readBinaryFile(std::string filePath)
     return fileBuffer;
 }
 
-bool writeBinaryFile(std::string filePath, std::vector<uint8_t>& contentToWrite)
+bool utils::writeBinaryFile(std::string filePath, std::vector<uint8_t>& contentToWrite)
 {
     std::ofstream fileStream(filePath, std::ios::out | std::ios::binary);
 

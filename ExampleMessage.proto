@@ -1,8 +1,17 @@
 syntax = "proto3";
 
+
+message SubMessage
+{
+    int32 sub_number = 1;
+    string sub_string = 2;
+}
+
 message ExampleMessage
 {
     int32  number = 1;
     string str = 2;
     repeated string str_array = 3;
+
+    repeated SubMessage sub_message_array = 4;
 }

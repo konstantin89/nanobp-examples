@@ -6,6 +6,9 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
+PB_BIND(SubMessage, SubMessage, AUTO)
+
+
 PB_BIND(ExampleMessage, ExampleMessage, AUTO)
 
 

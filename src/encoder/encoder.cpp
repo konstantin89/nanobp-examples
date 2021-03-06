@@ -10,7 +10,7 @@
 
 bool encode_string(pb_ostream_t* stream, const pb_field_t* field, void* const* arg)
 {
-    const char* str = (const char*)(*arg);
+    const char* str = reinterpret_cast<const char*>(*arg);
 
     if (!pb_encode_tag_for_field(stream, field))
         return false;
@@ -20,7 +20,7 @@ bool encode_string(pb_ostream_t* stream, const pb_field_t* field, void* const* a
 
 bool encode_string_vector(pb_ostream_t* stream, const pb_field_t* field, void* const* arg)
 {
-    std::vector<std::string>* str_vector = (std::vector<std::string>*)(*arg);
+    std::vector<std::string>* str_vector = reinterpret_cast<std::vector<std::string>*>(*arg);
 
     for (size_t i = 0; i < str_vector->size(); i++)
     {
@@ -37,6 +37,26 @@ bool encode_string_vector(pb_ostream_t* stream, const pb_field_t* field, void* c
     return true;
 }
 
+bool encode_submessage_vector(pb_ostream_t* stream, const pb_field_t* field, void* const* arg)
+{
+    std::vector<SubMessage>* submessage_vector = reinterpret_cast<std::vector<SubMessage>*>(*arg);
+
+    for (size_t i = 0; i < submessage_vector->size(); i++)
+    {
+
+        if (!pb_encode_tag_for_field(stream, field))
+        {
+            return false;
+        }
+
+        if(!pb_encode_submessage(stream, SubMessage_fields, &submessage_vector->at(i)))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 int runEncoderExample()
 {
@@ -52,6 +72,22 @@ int runEncoderExample()
 
     message.str_array.arg = &str_vector;
     message.str_array.funcs.encode = encode_string_vector;
+
+    SubMessage submessage_1 = SubMessage_init_default;
+    submessage_1.sub_number = 6;
+    submessage_1.sub_string.arg = "sub_str_1";
+    submessage_1.sub_string.funcs.encode = encode_string;
+
+    SubMessage submessage_2 = SubMessage_init_default;
+    submessage_2.sub_number = 7;
+    submessage_2.sub_string.arg = "sub_str_2";
+    submessage_2.sub_string.funcs.encode = encode_string;
+
+    std::vector<SubMessage> submessageVec = { submessage_1 , submessage_2 };
+
+    message.sub_message_array.arg = &submessageVec;
+    message.sub_message_array.funcs.encode = encode_submessage_vector;
+
 
 
     std::vector<uint8_t> encodedMessage = {};
@@ -88,7 +124,7 @@ int runEncoderExample()
         return 1;
     }
 
-    writeBinaryFile("message.bin", encodedMessage);
+    utils::writeBinaryFile(utils::ENCODED_MESSAGE_BIN_FILE_NAME, encodedMessage);
 
     return 0;
 }
