@@ -50,6 +50,9 @@ int runDecoderExample()
 
     // Decode the message
 
+    // The input stream is the source if the encoded message.
+    // Here we are reading the encoded message from buffer.
+    // It is also possible to provide reading callback that can for example read message from a file.
     pb_istream_t stream = pb_istream_from_buffer(
         fileContent.value().data(),
         fileContent.value().size());

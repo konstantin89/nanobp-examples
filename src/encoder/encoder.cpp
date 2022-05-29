@@ -74,8 +74,13 @@ int runEncoderExample()
 
     pb_ostream_t pbOutStream =
     {
+        // The callback of the output stream is used to store the enoded message.
+        // In this example, the encoded message is stored in buffer.
+        // Other implementation example, is callback that writes the output to file.
+        // If this callback is NULL, the encoding does not store the encoded message, only counts its size.
         [](pb_ostream_t* self, const pb_byte_t* buf, size_t count)
         {
+            // We store the target buffer is self->state field (Its void*).
             auto buffer = (std::vector<uint8_t>*)self->state;
             buffer->insert(buffer->end(), buf, buf + count);
             return true;

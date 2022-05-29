@@ -4,8 +4,18 @@
 
 POC of Protobuf encoder and decoder applications implemented with NanoPb.   
 
+#### Dependencies 
+* This example should run on Windows machine with MS toolchain installed.
+* CMake
+
+#### Supported types
+* Number
+* String
+* Array if strings
+* Array of custom structures
 
 </br>
+
 
 ## Links
 
@@ -16,7 +26,17 @@ POC of Protobuf encoder and decoder applications implemented with NanoPb.
 
 </br>
 
-## NanoPb autogen files generation
+
+## Compiling the project
+* mkdir build
+* cd build
+* cmake ..
+* Build the generated Visual Studio projects
+
+</br>
+
+
+## Generating NanoPB auto generated files
 
 `compile_proto.bat` script is used to compile the `ExampleMessage.proto` proto  
 file to C source and header files.  
@@ -26,14 +46,16 @@ root of the project.
 
 </br>
 
+
 ## Encoder application
 
 `build/encoder` application creates and example proto message.   
-Then it encodes it, and writes the excoded message to binary file.  
+Then it encodes it, and writes the encoded message to binary file.  
 
 The produced binary file then can be decoded by the decoder app.
 
 </br>
+
 
 ## Decoder application
 
